@@ -9,8 +9,13 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const exphbs  = require('express-handlebars');
 
+/*
+ * Add new routes files here
+ */
+
 const routes = require('./routes/index');
 const users = require('./routes/user');
+const robot = require('./routes/robot')
 
 const app = express();
 
@@ -36,8 +41,13 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/*
+ * Connect new routes files here
+ */
+
 app.use('/', routes);
 app.use('/users', users);
+app.use('/robot', robot);
 
 /// catch 404 and forward to error handler
 app.use((req, res, next) => {
