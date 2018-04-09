@@ -9,13 +9,19 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const exphbs  = require('express-handlebars');
 
+const mq = require('./controllers/MessageQueue')
+mq.subscribe('print', (msg) => {
+    console.log(msg);
+});
+
 /*
  * Add new routes files here
  */
 
 const routes = require('./routes/index');
 const users = require('./routes/user');
-const robot = require('./routes/robot')
+const robot = require('./routes/robot');
+const message = require('./routes/message');
 
 const app = express();
 
@@ -48,6 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/robot', robot);
+app.use('/message', message);
 
 /// catch 404 and forward to error handler
 app.use((req, res, next) => {
