@@ -1,24 +1,24 @@
 class MessageQueue {
   constructor() {
-    this.queues = {};
-    this.subscriptions = {};
+    this._queues = {};
+    this._subscriptions = {};
   }
 
   enqueue(item, key = null) {
-    if (this.queues[key] === undefined) {
-      this.queues[key] = [];
+    if (this._queues[key] === undefined) {
+      this._queues[key] = [];
     }
-    this.queues[key].push(item);
-    if (this.subscriptions[key] !== undefined) {
+    this._queues[key].push(item);
+    if (this._subscriptions[key] !== undefined) {
       this._emit(key);
     }
   }
 
   dequeue(key = null) {
-    if (this.queues[key] === undefined) {
+    if (this._queues[key] === undefined) {
       return undefined;
     } else {
-      return this.queues[key].shift();
+      return this._queues[key].shift();
     }
   }
 
@@ -28,7 +28,7 @@ class MessageQueue {
    * @param {Function} callback - Should accept one argument
    */
   subscribe(key, callback) {
-    this.subscriptions[key] = callback;
+    this._subscriptions[key] = callback;
   }
 
   /**
@@ -37,15 +37,19 @@ class MessageQueue {
    * @param {String} key
    */
   unsubscribe(key) {
-      this.subscriptions[key] = undefined;
+      this._subscriptions[key] = undefined;
+  }
+
+  size(key=null) {
+    return this._queues[key].length;
   }
 
   _emit(key) {
-    if (this.queues[key] !== undefined && this.queues[key].length > 0) {
+    if (this._queues[key] !== undefined && this._queues[key].length > 0) {
       let message = this.dequeue(key);
     }
-    if (this.subscriptions[key] !== undefined) {
-      this.subscriptions[key](message);
+    if (this._subscriptions[key] !== undefined) {
+      this._subscriptions[key](message);
     }
   }
 }
