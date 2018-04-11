@@ -8,10 +8,81 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const exphbs  = require('express-handlebars');
+const messenger = require('./controllers/curve');
 
 const mq = require('./controllers/MessageQueue')
 mq.subscribe('print', (msg) => {
     console.log(msg);
+});
+
+var myVar = setInterval(myTimer, 2);
+
+function myTimer() {
+    // EXAMPLE COMMAND MESSAGE:
+    var cM = {
+    "message_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+    "message_type": "command",
+    "robot_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+    "timestamp": 1509748526.3482552,
+    "configuration_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+    "session_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+    "instructions": [
+        {
+        "value": 0.10666666666666667,
+        "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+        "ttl": 1.412,
+        "type": "static"
+        },
+        {
+        "value": 0.10666666666666667,
+        "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+        "ttl": 1.412,
+        "type": "static"
+        },
+        {
+        "value": 0.10666666666666667,
+        "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+        "ttl": 1.412,
+        "type": "static"
+        }
+    ]
+    }
+    mq.enqueue(cM, 'left');
+}
+
+/*
+ * When a command is received, send it if an ack msg
+ * is waiting to be dequeued.
+ */
+
+mq.subscribe('left', (msg) => {
+    console.log("got subscription, with size of left of: ", mq.size('left'));
+    console.log(msg);
+    if(mq.size('right') > 0){
+        messenger.send(JSON.stringify(msg));
+        mq.dequeue('right');
+        console.log("sent message");
+    }
+    else{
+        mq.enqueue(msg,'left', true);
+    }
+    console.log("got subscription - done!");
+});
+
+/*
+ * When a message is received, send another message if available
+ * This will create a loop of acknowledgement messages in order to
+ * eat up the left queue.
+ */
+messenger.on('message', function(msg){
+    console.log("got message, with size of left of: ", mq.size('left'));
+    console.log(msg);
+    mq.enqueue(msg, 'right');
+    if(mq.size('left') > 0){
+        messenger.send(JSON.stringify(mq.dequeue('left')));
+        console.log("sent message");
+    }
+    console.log("got message - done!");
 });
 
 /*
