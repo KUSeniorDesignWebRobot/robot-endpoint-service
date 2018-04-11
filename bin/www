@@ -1,8 +1,25 @@
 #!/usr/bin/env node
-var app = require('../app');
+const app = require('../app');
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const state = require('../controllers/StateManager');
+const SocketSession = require('../controllers/SocketSession');
 
 app.set('port', process.env.PORT || 3000);
 
-var server = app.listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + server.address().port);
+
+state.setGlobalValue('http', http);
+state.setGlobalValue('io', io);
+
+http.listen(app.get('port'), function() {
+  console.log("Express server listening on port " + app.get('port'));
 });
+
+io.on("connection", function(socket) {
+  console.log("a user connected");
+  socketSession = new SocketSession(socket);
+});
+
+// const server = app.listen(app.get('port'), function() {
+//   console.log('Express server listening on port ' + server.address().port);
+// });

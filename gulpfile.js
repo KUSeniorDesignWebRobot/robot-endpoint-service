@@ -10,6 +10,7 @@ gulp.task("sass", () => {
     .src("./public/src/css/*.scss")
     .pipe(plumber())
     .pipe(sass())
+    .on('error', onError)
     .pipe(gulp.dest("./public/css"))
     .pipe(livereload());
 });
@@ -18,6 +19,7 @@ gulp.task("js", () => {
   gulp
     .src("./public/src/js/*.js")
     .pipe(babel({ presets: ["env"] }))
+    .on("error", onError)
     .pipe(gulp.dest("./public/js"))
     .pipe(livereload());
 });
@@ -43,5 +45,10 @@ gulp.task("develop", () => {
     this.stderr.pipe(process.stderr);
   });
 });
+
+function onError(err) {
+  console.error(err);
+  this.emit('end');
+}
 
 gulp.task("default", ["sass", "js", "develop", "watch"]);

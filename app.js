@@ -19,9 +19,8 @@ mq.subscribe('print', (msg) => {
  */
 
 const routes = require('./routes/index');
-const users = require('./routes/user');
 const robot = require('./routes/robot');
-const message = require('./routes/message');
+const session = require('./routes/session');
 
 const app = express();
 
@@ -52,9 +51,8 @@ app.use(express.static(path.join(__dirname, 'public')));
  */
 
 app.use('/', routes);
-app.use('/users', users);
 app.use('/robot', robot);
-app.use('/message', message);
+app.use('/session', session);
 
 /// catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -70,7 +68,7 @@ app.use((req, res, next) => {
 if (app.get('env') === 'development') {
     app.use((err, req, res, next) => {
         res.status(err.status || 500);
-        res.render('error', {
+        res.send({
             message: err.message,
             error: err,
             title: 'error'

@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
 
@@ -8,20 +8,25 @@
 
 <body>
 
+    <div class="container" ng-app="myApp" ng-controller="demo">
+        <h1>Team 2: Front End Demo</h1>
 
-  <h1><%title %></h1>
-  <p>Welcome to <%title %></p>
+        <div class="form-group">
+            <label for="message-field">Message:</label>
+            <input id="message-field" class="form-control" type="text" ng-model="cmessage">
+        </div>
 
-  <div ng-app="myApp" ng-controller="myCtrl">
+        <button class="btn btn-primary" ng-class="sessionReady ? '' : 'disabled'" ng-click="sendMessage()">Send</button>
 
-    First Name:
-    <input type="text" ng-model="firstName">
-    <br> Last Name:
-    <input type="text" ng-model="lastName">
-    <br>
-    <br> Full Name: {{firstName + " " + lastName}}
+        <hr/>
 
-  </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Report Messages</div>
+            <div class="panel-body">
+                <p style="font-family:monospace;" ng-repeat="message in reportMessages">{{message}}</p>
+            </div>
+        </div>
+    </div>
 
 </body>
 
