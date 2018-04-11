@@ -15,6 +15,7 @@ mq.subscribe('print', (msg) => {
     console.log(msg);
 });
 
+//EXAMPLE arrivale of command messages.  One every 2ms, for a total of 500 every second.
 var myVar = setInterval(myTimer, 2);
 
 function myTimer() {
