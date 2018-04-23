@@ -8,7 +8,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const exphbs  = require('express-handlebars');
-const messenger = require('./controllers/curve');
+const messenger = require('./controllers/Curve');
 
 const mq = require('./controllers/MessageQueue')
 mq.subscribe('print', (msg) => {
