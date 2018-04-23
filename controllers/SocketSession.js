@@ -33,7 +33,9 @@ class SocketSession {
 
   commandMessage(commandMessage) {
     if (this.established) {
-      mq.enqueue(commandMessage, this.sessionId + "-cmd");
+      var key = this.sessionId + "-cmd";
+      console.log('enqueue(' + commandMessage + ', ' + key + ')');
+      mq.enqueue(commandMessage, key);
     }
   }
 

@@ -82,8 +82,9 @@ class Messenger extends EventEmitter {
     }
 
     send(data) {
-        // console.log(typeof this);
+        console.log("HERE1");
         this.server.send(data);
+        console.log("HERE2");
     }
 }
 
