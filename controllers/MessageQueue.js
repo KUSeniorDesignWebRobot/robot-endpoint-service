@@ -4,14 +4,12 @@ class MessageQueue {
     this._subscriptions = {};
   }
 
-  enqueue(item, key = null) {
-    console.log(key + ', ' + item);
+  enqueue(item, key = null, quiet = false) {
     if (this._queues[key] === undefined) {
       this._queues[key] = [];
     }
     this._queues[key].push(item);
-    console.log(this._subscriptions);
-    if (this._subscriptions[key] != undefined) {
+    if (this._subscriptions[key] !== undefined && !quiet) {
       this._emit(key);
     }
   }
@@ -43,7 +41,10 @@ class MessageQueue {
   }
 
   size(key=null) {
-    return this._queues[key].length;
+    if(this._queues[key] !== undefined)
+      return this._queues[key].length;
+    else
+      return 0;
   }
 
   _emit(key) {
