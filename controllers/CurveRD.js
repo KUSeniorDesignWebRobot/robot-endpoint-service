@@ -80,7 +80,7 @@ class Messenger extends EventEmitter {
 
     }
 
-    emitfunction(data) {
+    emitfunction() {
       var robot_id = arguments[0].toString('utf8');
       var json_string = arguments[1].toString('utf8');
       var json_parsed = JSON.parse(json_string);
@@ -100,15 +100,18 @@ class Messenger extends EventEmitter {
         console.log("Must receive handshake message before messaging!");
       }
       else{
-        this.emit('message', [robot_id, json_parsed]);
+        this.emit('message', json_parsed);
       }
     }
+
     send(data) {
-      var name = data[0];
-      var json = data[1];
+      var name = data['robot_id'];
+      var json = data;
       var answer = false;
+      console.log("What")
       console.log(json);
       console.log(name);
+      console.log("End what")
       if(this.has_handshake.indexOf(name) > -1){
         this.server.send([name, JSON.stringify(json)]);
         answer = true;
@@ -121,7 +124,7 @@ class Messenger extends EventEmitter {
 var cM = {
     "message_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
     "message_type": "command",
-    "robot_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+    "robot_id": "7c78d289-f63e-40e2-89fc-8b033b84668e",
     "timestamp": 1509748526.3482552,
     "configuration_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
     "session_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",

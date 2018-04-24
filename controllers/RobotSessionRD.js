@@ -16,9 +16,8 @@ class RobotSession {
     if(typeof(msg) == typeof("string")){
       msg = JSON.parse(msg);
     }
-    var robot_id = msg[0];
-    var cmd = msg[1];
-    if(!messenger.send([robot_id, msg])){
+    var robot_id = msg['robot_id'];
+    if(!messenger.send(msg)){
       mq.enqueueToFront(msg, this.commandMessageQueueId, true);
     }
   }
@@ -36,7 +35,7 @@ class RobotSession {
     var i, cmd;
     for(i = 0; i < mq.size(this.commandMessageQueueId); i++) {
       cmd = mq.dequeue(this.commandMessageQueueId);
-      if(cmd[0] == name) {
+      if(cmd['robot_id'] == name) {
         console.log("OLD MESSAGE FOUND - REMOVING")
       }
       else{
