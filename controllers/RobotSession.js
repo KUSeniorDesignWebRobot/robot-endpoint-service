@@ -24,6 +24,8 @@ class RobotSession {
     }
     // while(1);
     console.log(msg);
+    console.log(typeof(msg));
+    while(1);
     console.log(
       "got subscription, with size of left of: ",
       mq.size(this.commandMessageQueueId)

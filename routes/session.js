@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const mq = require("../controllers/MessageQueue");
 const state = require("../controllers/StateManager");
-const RobotSession = require("../controllers/RobotSession");
+// const RobotSession = require("../controllers/RobotSession");
+const RobotSession = require("../controllers/RobotSessionRD");
 const uuidv4 = require("uuid/v4");
 const crypto = require("crypto");
 

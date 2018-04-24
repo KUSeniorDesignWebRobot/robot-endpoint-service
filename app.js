@@ -8,7 +8,8 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const exphbs  = require('express-handlebars');
-const messenger = require('./controllers/Curve');
+// const messenger = require('./controllers/Curve');
+const messenger = require('./controllers/CurveRD');
 
 const mq = require('./controllers/MessageQueue')
 mq.subscribe('print', (msg) => {
@@ -85,7 +86,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-var myVar = setInterval(myTimer, 300);
+// var myVar = setInterval(myTimer, 300);
 
 // myTimer();
 
