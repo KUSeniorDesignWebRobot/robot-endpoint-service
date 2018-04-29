@@ -23,6 +23,23 @@ router.get('/', checkAuth,
     });
   });
 
+// delete plz
+router.get('/plz', (req, res) => {
+  res.render('app/session', {
+    robot: {
+      name: 'jim',
+      id: 'asdf',
+      RobotId: 'asdfgh'
+    },
+    title: 'plz',
+    messages: {
+      'info': req.flash('info'),
+      'warning': req.flash('warning'),
+      'error': req.flash('error')
+    }
+  });
+});
+
 
 router.get('/session/:robotid', checkAuth, (req, res) => {
   UserController.getRobots(req.user).then(robots => {
