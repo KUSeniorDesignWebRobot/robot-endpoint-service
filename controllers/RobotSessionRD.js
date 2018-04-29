@@ -43,7 +43,7 @@ class RobotSession {
     messenger.on('message', this.commandMessageAcknowledgement.bind(this));
   }
 
-  unnattachSession() {
+  unattachSession() {
     if(self.sessionID != null && state.SessionExists(self.sessionID)) {
       var commandMessageQueueId = self.sessionID + "-cmd";
       var commandMessageAcknowledgementQueueId = self.sessionID + "-cmd-ack";
@@ -66,7 +66,7 @@ class RobotSession {
   }
 
   closeRobotSession(){
-    this.unnattachSession();
+    this.unattachSession();
     this.stopAliveCheck();
     state.removeRobotById(manifest['robot_id']);
   }

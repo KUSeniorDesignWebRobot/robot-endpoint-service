@@ -17,11 +17,11 @@ class HandshakeListener {
       console.log(robot_id + " has prior connection.");
       var priorSession = state.getRobotValue(robot_id, 'RobotSession');
       if(priorSession !== undefined){
-        priorSession.unnattachSession();
+        priorSession.unattachSession();
         priorSession.stopAliveCheck();
       }
     }
-    state.setRobotValue(robot_id, 'robotSession', new RobotSession(manifest));
+    state.setRobotValue(robot_id, 'RobotSession', new RobotSession(manifest));
     state.setRobotValue(robot_id, 'manifest', manifest);
 
     var handshake = {
