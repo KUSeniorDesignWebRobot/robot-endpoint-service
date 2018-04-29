@@ -134,6 +134,16 @@ var instance;
       this.setRobotValue(robotId, key, undefined, true);
     }
 
+    removeRobotById(robotId){
+      if (this.robotExists(robotId)){
+        this.__robotVars[robotId] = undefined;
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+
     /**
      * Returns a session value or undefined if no such session exists
      * @param {String} robotId

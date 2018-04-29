@@ -82,6 +82,18 @@ class MessageQueue {
       console.log( key + " Queue Contents: Empty");
     }
   }
+
+  filter(filterFunction, key){
+    var valuesRemoved = 0;
+    if(key != null && this._queue !== undefined){
+      var updatedQueue = this._queues[key].filter(filterFunction);
+      if(updatedQueue == this._queues[key]){
+        valuesRemoved = updatedQueue.length - this._queue[key].length;
+        this._queues[key] = updatedQueue;
+      }
+    }
+    return valuesRemoved;
+  }
 }
 
 instance = new MessageQueue();

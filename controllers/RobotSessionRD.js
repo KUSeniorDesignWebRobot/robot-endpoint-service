@@ -1,28 +1,32 @@
 const state = require("../controllers/StateManager");
 const mq = require("../controllers/MessageQueue");
 const messenger = require('../controllers/CurveRD');
+const uuidv4 = require('uuid/v4');
 
 class RobotSession {
-  constructor(sessionId) {
-    this.sessionId = sessionId;
-    this.commandMessageQueueId = this.sessionId + "-cmd";
-    this.commandMessageAcknowledgementQueueId = this.sessionId + "-cmd-ack";
-    this.reportMessageQueueId = this.sessionId + "-rep";
-    mq.subscribe(this.commandMessageQueueId, this.commandMessage.bind(this));
-    messenger.on('message', this.commandMessageAcknowledgement.bind(this));
-    messenger.on('handshake', this.robotHandshakeCleanup.bind(this));
+  constructor(manifest) {
+    this.sessionId = null;
+    this.commandMessageQueueId = null;
+    this.commandMessageAcknowledgementQueueId = null;
+    this.reportMessageQueueId = null;
+    this.manifest = manifest;
+    this.intervalID = setInterval(checkAlive, 1000);
+    messenger.on('alive', this.aliveMessageReceived.bind(this));
+    this.lastMessageReceivedTimestamp = Date.now();
   }
   commandMessage(msg) {
-    if(typeof(msg) == typeof("string")){
+    if(typeof(msg) === "string"){
       msg = JSON.parse(msg);
     }
     var robot_id = msg['robot_id'];
-    if(!messenger.send(msg)){
+    this.lastMessageSentTimeStamp = Date.now();
+    if(!messenger.send(robot_id, msg)){
       mq.enqueueToFront(msg, this.commandMessageQueueId, true);
     }
   }
 
-  commandMessageAcknowledgement(msg) {
+  commandMessageAcknowledgement(msg){
+    this.lastMessageReceivedTimestamp = Date.now();
     mq.enqueue(msg, this.commandMessageAcknowledgementQueueId);
   }
 
@@ -30,18 +34,65 @@ class RobotSession {
     mq.enqueue(msg, this.reportMessageQueueId);
   }
 
-  robotHandshakeCleanup(name) {
-    console.log(name + " has been authenticated and registered!");
-    var i, cmd;
-    for(i = 0; i < mq.size(this.commandMessageQueueId); i++) {
-      cmd = mq.dequeue(this.commandMessageQueueId);
-      if(cmd['robot_id'] == name) {
-        console.log("OLD MESSAGE FOUND - REMOVING")
+  attachSession(sessionID) {
+    this.sessionId = sessionId;
+    this.commandMessageQueueId = this.sessionId + "-cmd";
+    this.commandMessageAcknowledgementQueueId = this.sessionId + "-cmd-ack";
+    this.reportMessageQueueId = this.sessionId + "-rep";
+    mq.subscribe(this.commandMessageQueueId, this.commandMessage.bind(this));
+    messenger.on('message', this.commandMessageAcknowledgement.bind(this));
+  }
+
+  unnattachSession() {
+    if(self.sessionID != null && state.SessionExists(self.sessionID)) {
+      var commandMessageQueueId = self.sessionID + "-cmd";
+      var commandMessageAcknowledgementQueueId = self.sessionID + "-cmd-ack";
+      var reportMessageQueueId = self.sessionID + "-rep";
+      var commandMessagesRemoved = mq.filter(command => command['robot_id'] == robot_id, commandMessageQueueId);
+      var commandMessageAcknowledgementsRemoved = mq.filter(command => command['robot_id'] == robot_id, commandMessageAcknowledgementQueueId);
+      var reportMessagesRemoved = mq.filter(command => command['robot_id'] == robot_id, reportMessageQueueId);
+      if(commandMessagesRemoved + commandMessageAcknowledgementsRemoved + reportMessagesRemoved > 0){
+        console.log("Removed " + commandMessagesRemoved + " old command messages, " + commandMessageAcknowledgementsRemoved + " old acknowledgement messages, and " + reportMessagesRemoved + " old report messages found from session named '" + priorSession + "' belonging to robot named '" + robot_id + "'.");
       }
       else{
-        mq.enqueue(cmd, this.commandMessageQueueId, true);
+        console.log("No old messages found.");
       }
     }
+    self.sessionID = null;
+  }
+
+  getSession(){
+    return self.sessionID;
+  }
+
+  closeRobotSession(){
+    this.unnattachSession();
+    this.stopAliveCheck();
+    state.removeRobotById(manifest['robot_id']);
+  }
+
+  checkAlive(){
+    this.lastMessageSentTimestamp = Date.now();
+    if(this.lastMessageSentTimestamp - this.lastMessageReceivedTimestamp > 2000){
+      console.log("Error: Connection timeout with Robot, no alive check message received for 2000 milliseconds");
+      this.closeRobotSession();
+    }
+
+    var aliveMessage = {
+        "message_id": uuidv4(),
+        "message_type": "alive",
+        "robot_id": this.manifest['robot_id'],
+        "timestamp": this.lastMessageSentTimestamp,
+        }
+    messenger.send(this.manifest['robot_id'], aliveMessage);
+  }
+
+  stopAliveCheck(){
+    clearInterval(this.intervalID);
+  }
+
+  aliveMessageReceived(json_parsed){
+      this.lastMessageReceivedTimestamp = Date.now();
   }
 }
 
