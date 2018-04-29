@@ -44,10 +44,10 @@ class RobotSession {
   }
 
   unattachSession() {
-    if(self.sessionID != null && state.SessionExists(self.sessionID)) {
-      var commandMessageQueueId = self.sessionID + "-cmd";
-      var commandMessageAcknowledgementQueueId = self.sessionID + "-cmd-ack";
-      var reportMessageQueueId = self.sessionID + "-rep";
+    if(this.sessionID != null && state.SessionExists(this.sessionID)) {
+      var commandMessageQueueId = this.sessionID + "-cmd";
+      var commandMessageAcknowledgementQueueId = this.sessionID + "-cmd-ack";
+      var reportMessageQueueId = this.sessionID + "-rep";
       var commandMessagesRemoved = mq.filter(command => command['robot_id'] == robot_id, commandMessageQueueId);
       var commandMessageAcknowledgementsRemoved = mq.filter(command => command['robot_id'] == robot_id, commandMessageAcknowledgementQueueId);
       var reportMessagesRemoved = mq.filter(command => command['robot_id'] == robot_id, reportMessageQueueId);
@@ -58,11 +58,11 @@ class RobotSession {
         console.log("No old messages found.");
       }
     }
-    self.sessionID = null;
+    this.sessionID = null;
   }
 
   getSession(){
-    return self.sessionID;
+    return this.sessionID;
   }
 
   closeRobotSession(){

@@ -88,6 +88,8 @@ class Messenger extends EventEmitter {
       var json_parsed = JSON.parse(json_string);
       if(robot_id !== json_parsed['robot_id']){
         console.log("Error: robot_id of sender and robot_id in handshake message are different.  May cause weirdness.");
+        console.log(robot_id);
+        console.log(json_parsed['robot_id']);
       }
       if(json_parsed['message_type'] == 'handshake'){
         this.emit('handshake', json_parsed);
@@ -123,28 +125,18 @@ class Messenger extends EventEmitter {
 var cM = {
     "message_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
     "message_type": "command",
-    "robot_id": "7c78d289-f63e-40e2-89fc-8b033b84668e",
+    "robot_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
     "timestamp": 1509748526.3482552,
     "configuration_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
     "session_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
     "instructions": [
         {
-        "value": 0.10666666666666667,
-        "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-        "ttl": 1.412,
-        "type": "static"
-        },
-        {
-        "value": 0.10666666666666667,
-        "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-        "ttl": 1.412,
-        "type": "static"
-        },
-        {
-        "value": 0.10666666666666667,
-        "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-        "ttl": 1.412,
-        "type": "static"
+
+            "ttl": 500,
+            "value": 500,
+            "actuator_id": "78e7c177-9e01-4447-bb7f-bc08ff7e0932",
+            "type": "static",
+            "timestamp": 0
         }
     ]
     }
