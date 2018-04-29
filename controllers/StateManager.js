@@ -1,4 +1,4 @@
-var instance = undefined;
+var instance;
 
 (function() {
   /**
