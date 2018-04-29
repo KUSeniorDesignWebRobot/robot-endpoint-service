@@ -32,11 +32,12 @@ class Messenger extends EventEmitter {
         // Tell it to use the CURVE mechanism for authentication
         zap.use(new CurveMechanism(function(data, callback) {
             console.log('Authenticating %s', JSON.stringify(data, true, 2));
-            if ((data.domain == 'test')){
+            if ((data.domain == 'robots')){
                // && (data.address == "127.0.0.1")) { //this caused it to fail bc we're bound to * which is the current IP, which might not be 127.0.0.1
                 // while(1)
-                if (data.publickey == clientPublicKey) callback(null, true);
-                else callback(null, false);
+                // if (data.publickey == clientPublicKey) callback(null, true);
+                // else callback(null, true);
+                callback(null, true);
             }
             else{
                callback(null, false);
@@ -70,7 +71,7 @@ class Messenger extends EventEmitter {
         // Set the private key for the server so that it can decrypt messages (it does not need its public key)
         this.server.curve_secretkey = serverPrivateKey;
         // Set a domain, but this is optional
-        this.server.zap_domain = "test";
+        this.server.zap_domain = "robots";
 
         this.server.curve_secretkey = serverPrivateKey;
         this.server.curve_publickey = serverPublicKey;
