@@ -1,0 +1,13 @@
+<% if (locals.info) { %>
+  <div class="alert alert-primary" role="alert">
+    <% info %>
+  </div>
+<% } else if(locals.warn) { %>
+  <div class="alert alert-warning" role="alert">
+    <% warn %>
+  </div>
+<% } else if(locals.err) { %>
+  <div class="alert alert-danger" role="alert">
+    <% err %>
+  </div>
+<% } %>
