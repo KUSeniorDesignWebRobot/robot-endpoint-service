@@ -1,12 +1,26 @@
 var app = angular.module('myApp', ['rzModule', 'ui.bootstrap']);
 var socket = io('http://localhost:3000');
 
-app.controller('demo', function($scope, $http, $log, $timeout) {
+function uuidv4() {
+  // source: https://stackoverflow.com/a/2117523
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+app.controller('demo', function($scope, $http, $log, $timeout, $interval) {
   $scope.sessionReady = false;
   $scope.reportMessages = [];
   $scope.controls = [];
 
   $scope.init = function demoInit() {
+    $scope.robot = robot;
+    $scope.config = {
+      ttl: 1000,
+      sampleIntervalMillis: 50
+    };
+
     // Set up session
     $http.post('/session', {}).then(function(data, status, headers) {
       $log.log(data);
@@ -39,6 +53,7 @@ app.controller('demo', function($scope, $http, $log, $timeout) {
 
   $scope.ready = function ready() {
     $scope.createControls();
+    $scope.sampleInterval = $interval($scope.sampleControls, $scope.config.sampleIntervalMillis);
   };
 
   $scope.onReportMessage = function onReportMessage(message) {
@@ -49,16 +64,35 @@ app.controller('demo', function($scope, $http, $log, $timeout) {
 
   $scope.onClose = function onClose() {
     $log.info('Server closed connection');
+    $scope.stop();
   };
 
-  $scope.sendMessage = function demoSendMessage() {
-    socket.emit('commandMessage', $scope.cmessage);
-    $log.info($scope.cmessage);
-    $scope.cmessage = '';
+  $scope.sendMessage = function sendMessage(message, channel='commandMessage') {
+    socket.emit(channel, message);
   };
 
   $scope.sampleControls = function sampleControls() {
+    let sample_timestamp = Date.now() / 1000.0;
+    let instructions = $scope.controls.map(control => {
+      return {
+        ttl: $scope.config.ttl,
+        value: control.value,
+        type: control.expirationBehavior,
+        actuator_id: control.id,
+        timestamp: sample_timestamp
+      };
+    });
 
+    let commandMessage = {
+      message_id: uuidv4(),
+      message_type: "command",
+      robot_id: $scope.robot.RobotId,
+      timestamp: sample_timestamp,
+      session_id: $scope.sessionId,
+      instructions: instructions
+    };
+
+    $scope.sendMessage(commandMessage);
   };
 
   $scope.createControls = function createControls() {
@@ -99,6 +133,11 @@ app.controller('demo', function($scope, $http, $log, $timeout) {
     });
     $scope.$broadcast('rzSliderForceRender');
     $scope.$apply();
+  };
+
+  $scope.stop = function stop() {
+    $scope.sampleInterval.cancel();
+    // TODO
   };
 
   $scope.init();
