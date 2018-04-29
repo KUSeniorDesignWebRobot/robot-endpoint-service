@@ -16,6 +16,7 @@ app.controller('demo', function($scope, $http, $log, $timeout, $interval) {
 
   $scope.init = function demoInit() {
     $scope.robot = robot;
+    $scope.configurationId = uuidv4(); //required by the spec but not used
     $scope.config = {
       ttl: 1000,
       sampleIntervalMillis: 50
@@ -87,6 +88,7 @@ app.controller('demo', function($scope, $http, $log, $timeout, $interval) {
       message_id: uuidv4(),
       message_type: "command",
       robot_id: $scope.robot.RobotId,
+      configuration_id: $scope.configurationId,
       timestamp: sample_timestamp,
       session_id: $scope.sessionId,
       instructions: instructions
