@@ -21,7 +21,7 @@ class HandshakeListener {
         priorSession.stopAliveCheck();
       }
     }
-    state.setRobotValue(robot_id, 'robotSession', new RobotSession(manifest));
+    state.setRobotValue(robot_id, 'RobotSession', new RobotSession(manifest));
     state.setRobotValue(robot_id, 'manifest', manifest);
 
     var handshake = {

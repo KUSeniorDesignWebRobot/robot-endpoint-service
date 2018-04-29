@@ -14,15 +14,16 @@ class SocketSession {
   }
 
   establish(data) {
-    sessionId = data.sessionId;
-    sessionToken = data.sessionToken;
-    robotId = data.RobotId;
+    this.sessionId = data.sessionId;
+    this.sessionToken = data.sessionToken;
+    this.robotId = data.robotId;
     if (state.getSessionValue(sessionId, "sessionToken") == sessionToken) {
       this.sessionId = sessionId;
 
-      if (state.robotExists(robotId)) {
-        let manifest = state.getRobotValue(robotId, 'manifest');
-        let robotSession = state.getRobotValue(robotId, 'RobotSession');
+      if (state.robotExists(this.robotId)) {
+        state.debug();
+        let manifest = state.getRobotValue(this.robotId, 'manifest');
+        let robotSession = state.getRobotValue(this.robotId, 'RobotSession');
         robotSession.attachSession(sessionId);
         this.robotSession = robotSession;
 
@@ -33,7 +34,7 @@ class SocketSession {
       } else {
         this.socket.emit("establish", {
           acknowledged: false,
-          reason: "robot with id " + robotId + " not found"
+          reason: "robot with id " + this.robotId + " not found"
         });
       }
 

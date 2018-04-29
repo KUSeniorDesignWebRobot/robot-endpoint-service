@@ -45,7 +45,8 @@ router.get('/session/:robotid', checkAuth, (req, res) => {
   UserController.getRobots(req.user).then(robots => {
     let robot = robots.find(robot => robot.id === req.params.robotid && robot.active);
     if (robot !== undefined) {
-      res.render('session', {
+      res.render('app/session', {
+        title: "STV Robotics: " + robot.name,
         robot: robot,
         messages: {
           'info': req.flash('info'),

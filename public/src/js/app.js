@@ -167,6 +167,7 @@ app.controller('demo', function($scope, $http, $log, $timeout) {
           $scope.$apply();
           $scope.ready();
         } else {
+          $log.log(res);
           $log.warn('Session request rejected');
         }
       });
