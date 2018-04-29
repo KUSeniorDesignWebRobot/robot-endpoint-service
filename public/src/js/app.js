@@ -8,17 +8,17 @@ app.controller('demo', function($scope, $http, $log) {
 
   $scope.init = function demoInit() {
     // Set up session
-    $http.post('/session/demo', {}).then(function(data, status, headers) {
+    $http.post('/app/session/demo', {}).then(function(data, status, headers) {
       $log.log(data);
       $log.info(data);
-      $scope.sessionId = data['data']['sessionId'];
-      $scope.sessionToken = data['data']['sessionToken'];
+      $scope.sessionId = data.data.sessionId;
+      $scope.sessionToken = data.data.sessionToken;
 
       let messageBody = { sessionId: $scope.sessionId, sessionToken: $scope.sessionToken };
       $log.log(messageBody);
       socket.emit('establish', messageBody);
       socket.on('establish', res => {
-        if (res['acknowledged'] == 'true') {
+        if (res.acknowledged == 'true') {
           $log.log(res);
           socket.on('reportMessage', $scope.onReportMessage);
           socket.on('close', $scope.onClose);

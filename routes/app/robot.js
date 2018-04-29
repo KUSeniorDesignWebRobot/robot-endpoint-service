@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const state = require("../controllers/StateManager");
-const models = require("../models");
+const state = require("../../controllers/StateManager");
+const models = require("../../models");
 const User = models.User;
 const Robot = models.Robot;
-const UserController = require("../controllers/User");
-const checkAuth = require("../controllers/Auth");
+const UserController = require("../../controllers/User");
+const checkAuth = require("../../controllers/Auth");
 
 
 router.post('/', checkAuth,

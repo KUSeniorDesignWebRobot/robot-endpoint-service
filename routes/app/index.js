@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const passport = require("passport");
-const models = require("../models");
+const models = require("../../models");
 const User = models.User;
 const Robot = models.Robot;
-const UserController = require("../controllers/User");
-const RobotController = require("../controllers/Robot");
-const checkAuth = require("../controllers/Auth");
+const UserController = require("../../controllers/User");
+const RobotController = require("../../controllers/Robot");
+const checkAuth = require("../../controllers/Auth");
 
 router.get('/', checkAuth,
   (req, res) => {
