@@ -24,7 +24,7 @@ router.get('/', checkAuth,
   });
 
 // delete plz
-router.get('/plz', (req, res) => {
+router.get('/plz', checkAuth, (req, res) => {
   res.render('app/session', {
     robot: {
       name: 'jim',

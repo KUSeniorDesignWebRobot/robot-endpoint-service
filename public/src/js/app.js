@@ -146,15 +146,15 @@ app.controller('demo', function($scope, $http, $log, $timeout) {
 
   $scope.init = function demoInit() {
     // Set up session
-    $http.post('/app/session/demo', {}).then(function(data, status, headers) {
+    $http.post('/session', {}).then(function(data, status, headers) {
       $log.log(data);
-      $log.info(data);
       $scope.sessionId = data.data.sessionId;
       $scope.sessionToken = data.data.sessionToken;
 
       let messageBody = {
         sessionId: $scope.sessionId,
-        sessionToken: $scope.sessionToken
+        sessionToken: $scope.sessionToken,
+        robotId: robot.RobotId
       };
       $log.log(messageBody);
       socket.emit('establish', messageBody);
@@ -243,12 +243,11 @@ app.controller('demo', function($scope, $http, $log, $timeout) {
     }
   };
 
+
+  $scope.init();
+
+
   $scope.createControls(manifest);
   $log.info($scope.controls);
-  $timeout(1000, () => $scope.$broadcast('rzSliderForceRender'));
-
-  // $scope.init();
-  $timeout(4000, () => $scope.$apply());
-
-
+  $scope.$broadcast('rzSliderForceRender');
 });

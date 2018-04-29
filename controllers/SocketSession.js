@@ -14,15 +14,29 @@ class SocketSession {
   }
 
   establish(data) {
-    sessionId = data["sessionId"];
-    sessionToken = data["sessionToken"];
+    sessionId = data.sessionId;
+    sessionToken = data.sessionToken;
+    robotId = data.RobotId;
     if (state.getSessionValue(sessionId, "sessionToken") == sessionToken) {
       this.sessionId = sessionId;
 
-      state.setSessionValue(sessionId, "SocketSession", this);
-      mq.subscribe(sessionId + "-rep", this.reportMessage.bind(this));
-      this.socket.emit("establish", { acknowledged: "true" });
-      this.established = true;
+      if (state.robotExists(robotId)) {
+        let manifest = state.getRobotValue(robotId, 'manifest');
+        let robotSession = state.getRobotValue(robotId, 'RobotSession');
+        robotSession.attachSession(sessionId);
+        this.robotSession = robotSession;
+
+        state.setSessionValue(sessionId, "SocketSession", this);
+        mq.subscribe(sessionId + "-rep", this.reportMessage.bind(this));
+        this.socket.emit("establish", { acknowledged: "true", manifest: manifest });
+        this.established = true;
+      } else {
+        this.socket.emit("establish", {
+          acknowledged: false,
+          reason: "robot with id " + robotId + " not found"
+        });
+      }
+
     } else {
       this.socket.emit("establish", {
         acknowledged: false,
@@ -46,11 +60,13 @@ class SocketSession {
     }
   }
 
-  close() {
+  close(instigator=false) {
     if (this.established) {
       this.socket.emit("close");
-      mq.enqueue({ type: "close" }, this.sessionId + "-cmd");
       state.clearSessionValue(this.sessionId, "SocketSession");
+      if (instigator) {
+        this.robotSession.unattachSession();
+      }
     }
   }
 }
