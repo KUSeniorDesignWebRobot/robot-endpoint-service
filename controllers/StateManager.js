@@ -6,10 +6,11 @@ var instance = undefined;
    */
   var __vars = {};
   var __sessionVars = {};
+  var __robotVars = {};
 
   class StateManager {
     constructor() {
-      
+
     }
 
     debug() {
@@ -81,8 +82,8 @@ var instance = undefined;
 
     /**
      * Returns a session value or undefined if no such session exists
-     * @param {String} sessionId 
-     * @param {String} key 
+     * @param {String} sessionId
+     * @param {String} key
      * @return {*}
      */
     getSessionValue(sessionId, key) {
@@ -95,11 +96,65 @@ var instance = undefined;
 
     /**
      * Returns true if a session exists as sessionId, else false
-     * @param {String} sessionId 
+     * @param {String} sessionId
      * @return {Boolean}
      */
     sessionExists(sessionId) {
       return __sessionVars[sessionId] !== undefined;
+    }
+
+
+    /**
+     * Sets a robot scoped variable
+     * @param {String} robotId
+     * @param {String} key
+     * @param {*} value
+     * @param {Boolean} overwrite = true
+     * @return {Boolean} true if successfully set, false if unsuccesful (if overwrite === false and that key already has a value)
+     */
+    setRobotValue(robotId, key, value, overwrite = true) {
+      if (!this.robotExists(robotId)) {
+        __robotVars[robotId] = {};
+      }
+
+      if (__robotVars[robotId][key] === undefined || overwrite) {
+        __robotVars[robotId][key] = value;
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    /**
+     * Clears a session level variable
+     * @param {String} robotId
+     * @param {String} key
+     */
+    clearRobotValue(robotId, key) {
+      this.setRobotValue(robotId, key, undefined, true);
+    }
+
+    /**
+     * Returns a session value or undefined if no such session exists
+     * @param {String} robotId
+     * @param {String} key
+     * @return {*}
+     */
+    getRobotValue(robotId, key) {
+      if (!this.robotExists(robotId)) {
+        return undefined;
+      } else {
+        return __robotVars[robotId][key];
+      }
+    }
+
+    /**
+     * Returns true if a robot session exists as robotId, else false
+     * @param {String} robotId
+     * @return {Boolean}
+     */
+    robotExists(robotId) {
+      return __robotVars[robotId] !== undefined;
     }
   }
 
