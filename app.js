@@ -16,6 +16,7 @@ mq.subscribe('print', (msg) => {
     console.log(msg);
 });
 //listens for handshake messages and takes care of robot registration in state manager
+console.log("Making the listener");
 const hl = require('./controllers/HandshakeListener');
 
 /*
@@ -93,39 +94,39 @@ app.use((err, req, res, next) => {
 
 // myTimer();
 
-// function myTimer() {
-//     // EXAMPLE COMMAND MESSAGE:
-//     var cM = {
-//     "message_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-//     "message_type": "command",
-//     "robot_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-//     "timestamp": 1509748526.3482552,
-//     "configuration_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-//     "session_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-//     "instructions": [
-//         {
-//         "value": 0.10666666666666667,
-//         "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-//         "ttl": 1.412,
-//         "type": "static"
-//         },
-//         {
-//         "value": 0.10666666666666667,
-//         "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-//         "ttl": 1.412,
-//         "type": "static"
-//         },
-//         {
-//         "value": 0.10666666666666667,
-//         "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-//         "ttl": 1.412,
-//         "type": "static"
-//         }
-//     ]
-//     }
-//     console.log(typeof(cM));
-//     // while(1);
-//     mq.enqueue(cM, 'demo-cmd');
-// }
+function myTimer() {
+    // EXAMPLE COMMAND MESSAGE:
+    var cM = {
+    "message_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+    "message_type": "command",
+    "robot_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+    "timestamp": 1509748526.3482552,
+    "configuration_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+    "session_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+    "instructions": [
+        {
+        "value": 0.10666666666666667,
+        "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+        "ttl": 1.412,
+        "type": "static"
+        },
+        {
+        "value": 0.10666666666666667,
+        "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+        "ttl": 1.412,
+        "type": "static"
+        },
+        {
+        "value": 0.10666666666666667,
+        "actuator_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
+        "ttl": 1.412,
+        "type": "static"
+        }
+    ]
+    }
+    console.log(typeof(cM));
+    // while(1);
+    mq.enqueue(cM, 'demo-cmd');
+}
 
 module.exports = app;

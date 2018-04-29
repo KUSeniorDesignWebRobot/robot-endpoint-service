@@ -75,6 +75,7 @@ class Messenger extends EventEmitter {
         this.server.curve_secretkey = serverPrivateKey;
         this.server.curve_publickey = serverPublicKey;
         this.server.bind(port);
+        console.log("Listening for robots on port: " + port);
         // this.has_handshake = [];
         const that = this;
         this.server.on('message', this.emitfunction.bind(this));

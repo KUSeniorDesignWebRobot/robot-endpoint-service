@@ -1,6 +1,7 @@
 const state = require("../controllers/StateManager");
 const mq = require("../controllers/MessageQueue");
 const messenger = require('../controllers/CurveRD');
+const RobotSession = require('../controllers/RobotSessionRD');
 
 class HandshakeListener {
   constructor() {
@@ -8,6 +9,7 @@ class HandshakeListener {
   }
 
   registerRobot(json_parsed) {
+    console.log("Processing Handshake");
     var robot_id = json_parsed['robot_id'];
     var manifest = json_parsed['manifest'];
 
@@ -28,8 +30,10 @@ class HandshakeListener {
     };
 
     messenger.send(robot_id, JSON.stringify(handshake));
-    console.log(name + " has been authenticated and registered!");
+    console.log(robot_id + " has been authenticated and registered!");
   }
 }
 
-module.exports = HandshakeListener;
+instance = new HandshakeListener();
+
+module.exports = instance;

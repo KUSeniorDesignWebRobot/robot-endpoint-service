@@ -10,7 +10,7 @@ class RobotSession {
     this.commandMessageAcknowledgementQueueId = null;
     this.reportMessageQueueId = null;
     this.manifest = manifest;
-    this.intervalID = setInterval(checkAlive, 1000);
+    this.intervalID = setInterval(this.checkAlive, 1000, manifest);
     messenger.on('alive', this.aliveMessageReceived.bind(this));
     this.lastMessageReceivedTimestamp = Date.now();
   }
@@ -71,7 +71,7 @@ class RobotSession {
     state.removeRobotById(manifest['robot_id']);
   }
 
-  checkAlive(){
+  checkAlive(manifest){
     this.lastMessageSentTimestamp = Date.now();
     if(this.lastMessageSentTimestamp - this.lastMessageReceivedTimestamp > 2000){
       console.log("Error: Connection timeout with Robot, no alive check message received for 2000 milliseconds");
@@ -81,10 +81,10 @@ class RobotSession {
     var aliveMessage = {
         "message_id": uuidv4(),
         "message_type": "alive",
-        "robot_id": this.manifest['robot_id'],
+        "robot_id": manifest['robot_id'],
         "timestamp": this.lastMessageSentTimestamp,
         }
-    messenger.send(this.manifest['robot_id'], aliveMessage);
+    messenger.send(manifest['robot_id'], aliveMessage);
   }
 
   stopAliveCheck(){
