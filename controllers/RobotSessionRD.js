@@ -74,7 +74,7 @@ class RobotSession {
   checkAlive(manifest){
     var lastTime = this.lastMessageReceivedTimestamp;
     this.lastMessageSentTimestamp = Date.now();
-    if(this.lastMessageSentTimestamp - lastTime > 2000){
+    if(this.lastMessageSentTimestamp - lastTime > 10000){
       console.log("Error: Connection timeout with Robot, no alive check message received for 2000 milliseconds");
       this.closeRobotSession();
     }
