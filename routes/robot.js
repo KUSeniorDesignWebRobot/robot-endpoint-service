@@ -1,27 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const state = require("../controllers/StateManager");
+const models = require("../models");
+const User = models.User;
+const Robot = models.Robot;
+const UserController = require("../controllers/User");
+const checkAuth = require("../controllers/Auth");
 
 
-/* GET home page. */
-router.get("/", (req, res) => {
-  console.log("GET /robot just happened");
-  res.send('{"name":"robot-endpoint-service"}');
-});
+router.post('/', checkAuth,
+  (req, res) => {
+    let user = req.user;
+    let robotId = req.body.id;
+    let name = req.body.name;
 
-/**
- * DELETEME
- * Testing endpoint for sending report messages
- */
-router.post("/:id", (req, res) => {
-  let sessionId = req.params.id;
-  let message = req.body;
-  console.log('POST robot/' + sessionId + ' just happened');
-  state.debug();
-  let robotSession = state.getSessionValue(sessionId, 'RobotSession');
-  robotSession.reportMessage(message);
-  let responseObject = { acknowledged: true };
-  res.send(responseObject);
-});
+    Robot.create({
+      UserId: user.id,
+      RobotId: robotId,
+      name: name
+    }).then(robot => {
+      req.flash('info', 'Registered robot');
+      res.redirect('/app');
+    });
+  });
+
 
 module.exports = router;

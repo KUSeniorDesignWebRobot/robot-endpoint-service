@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const models = require("../models");
 const User = models.User;
+const Robot = models.Robot;
 const UserController = require("../controllers/User");
 const checkAuth = require("../controllers/Auth");
 
@@ -34,15 +35,11 @@ router.post('/register', (req, res) => {
       req.flash('info', 'Created user');
       res.redirect('/');
     } else {
-      res.render('register', {'title': 'STV Robotics: Register', messages: {'info': req.flash('info'), 'warning': req.flash('warning'), 'error': req.flash('error')}});
+      req.flash('warning', 'That username is already taken');
+      res.redirect('/register');
     }
   });
 });
-//
-router.get('/app', checkAuth,
-  (req, res) => {
-    console.log(req.session);
-    res.render('app', {'title': 'STV Robotics'});
-  });
+
 
 module.exports = router;
