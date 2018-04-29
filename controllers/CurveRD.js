@@ -110,10 +110,6 @@ class Messenger extends EventEmitter {
       // var robot_id = data['robot_id'];
       var json = data;
       var answer = false;
-      console.log("What")
-      console.log(json);
-      console.log(robot_id);
-      console.log("End what")
       // if(this.has_handshake.indexOf(name) > -1){
       if(state.robotExists(robot_id)){
         this.server.send([robot_id, JSON.stringify(json)]);
