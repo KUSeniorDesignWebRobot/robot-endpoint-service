@@ -92,6 +92,7 @@ class RobotSession {
   }
 
   aliveMessageReceived(json_parsed){
+    if(json_parsed['robot_id'] === this.manifest['robot_id']);
       this.lastMessageReceivedTimestamp = Date.now();
   }
 }
