@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const mq = require("../controllers/MessageQueue");
-const state = require("../controllers/StateManager");
+const mq = require("../../controllers/MessageQueue");
+const state = require("../../controllers/StateManager");
 // const RobotSession = require("../controllers/RobotSession");
-const RobotSession = require("../controllers/RobotSessionRD");
+const RobotSession = require("../../controllers/RobotSessionRD");
 const uuidv4 = require("uuid/v4");
 const crypto = require("crypto");
-const checkAuth = require("../controllers/Auth");
+const checkAuth = require("../../controllers/Auth");
 
 router.post("/", checkAuth, (req, res) => {
   console.log("POST /session/ just happened");

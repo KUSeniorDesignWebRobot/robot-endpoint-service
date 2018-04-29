@@ -22,9 +22,9 @@ const UserController = require('./controllers/User');
  */
 
 const routes = require("./routes/index");
-const robotRoutes = require("./routes/robot");
-const sessionRoutes = require("./routes/session");
-const appRoutes = require("./routes/app");
+const robotRoutes = require("./routes/app/robot");
+const appRoutes = require("./routes/app/index");
+const sessionRoutes = require("./routes/app/session");
 
 const app = express();
 
@@ -112,8 +112,8 @@ passport.deserializeUser(function(userid, cb) {
  */
 
 app.use("/", routes);
-app.use("/robot", robotRoutes);
-app.use("/session", sessionRoutes);
+app.use("/app/robot", robotRoutes);
+app.use("/app/session", sessionRoutes);
 app.use("/app", appRoutes);
 
 /// catch 404 and forward to error handler
