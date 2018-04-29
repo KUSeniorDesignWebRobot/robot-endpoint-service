@@ -14,8 +14,11 @@ var instance;
     }
 
     debug() {
-      console.log(__vars);
-      console.log(__sessionVars);
+      // console.log(__vars);
+      // console.log(__sessionVars);
+      console.log('--------');
+      console.log(__robotVars);
+      console.log('--------');
     }
 
     /**

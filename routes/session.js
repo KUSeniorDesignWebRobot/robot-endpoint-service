@@ -24,36 +24,4 @@ router.post("/", checkAuth, (req, res) => {
   res.send(responseObject);
 });
 
-router.post("/:id", checkAuth, (req, res) => {
-  sessionId = req.params.id;
-  console.log("POST /session/" + sessionId + " just happened");
-
-  if (state.sessionExists(sessionId)) {
-    sessionToken = crypto.randomBytes(48).toString("hex");
-    robotSession = new RobotSession(sessionId);
-    state.setSessionValue(sessionId, "sessionToken", sessionToken);
-    state.setSessionValue(sessionId, "RobotSession", robotSession);
-
-    responseObject = {
-      acknowledged: true,
-      sessionId: sessionId,
-      sessionToken: sessionToken
-    };
-    res.send(responseObject);
-  } else {
-    sessionToken = crypto.randomBytes(48).toString("hex");
-    robotSession = new RobotSession(sessionId);
-    state.setSessionValue(sessionId, "sessionToken", sessionToken);
-    state.setSessionValue(sessionId, "RobotSession", robotSession);
-
-    responseObject = {
-      acknowledged: true,
-      sessionId: sessionId,
-      sessionToken: sessionToken
-    };
-    res.send(responseObject);
-  }
-});
-
-
 module.exports = router;

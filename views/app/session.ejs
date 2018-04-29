@@ -2,10 +2,10 @@
 
 <html lang="en">
 <script>
-  const robot = <% robot %>;
+  const robot = <%- JSON.stringify(robot) %>;
 </script>
 
-<% include ./partials/header-app %>
+<% include ../partials/header-app %>
 
   <body>
 
@@ -27,7 +27,15 @@
           <p style="font-family:monospace;" ng-repeat="message in reportMessages">{{message}}</p>
         </div>
       </div>
+
+      <div ng-repeat="control in controls">
+        <p>{{control.description}}</p>
+        <rzslider rz-slider-model="control.value" rz-slider-options="control.options"></rzslider>
+      </div>
     </div>
+
+    <hr/>
+    <rzslider rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
 
   </body>
 

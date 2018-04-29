@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const passport = require("passport");
-const models = require("../models");
+const models = require("../../models");
 const User = models.User;
 const Robot = models.Robot;
-const UserController = require("../controllers/User");
-const RobotController = require("../controllers/Robot");
-const checkAuth = require("../controllers/Auth");
+const UserController = require("../../controllers/User");
+const RobotController = require("../../controllers/Robot");
+const checkAuth = require("../../controllers/Auth");
 
 router.get('/', checkAuth,
   (req, res) => {
@@ -23,12 +23,30 @@ router.get('/', checkAuth,
     });
   });
 
+// delete plz
+router.get('/plz', checkAuth, (req, res) => {
+  res.render('app/session', {
+    robot: {
+      name: 'jim',
+      id: 'asdf',
+      RobotId: 'asdfgh'
+    },
+    title: 'plz',
+    messages: {
+      'info': req.flash('info'),
+      'warning': req.flash('warning'),
+      'error': req.flash('error')
+    }
+  });
+});
+
 
 router.get('/session/:robotid', checkAuth, (req, res) => {
   UserController.getRobots(req.user).then(robots => {
     let robot = robots.find(robot => robot.id === req.params.robotid && robot.active);
     if (robot !== undefined) {
-      res.render('session', {
+      res.render('app/session', {
+        title: "STV Robotics: " + robot.name,
         robot: robot,
         messages: {
           'info': req.flash('info'),

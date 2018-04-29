@@ -11,3 +11,9 @@ a {
   border-right-width: 1px;
   border-right-color: rgba(0, 0, 0, 0.1);
 }
+
+.rzslider.smooth {
+  .rz-bar.rz-selection, .rz-pointer {
+    transition: all 0.1s;
+  }
+}
