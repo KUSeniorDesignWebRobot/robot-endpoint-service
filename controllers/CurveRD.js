@@ -1,4 +1,5 @@
 const EventEmitter = require('events');
+const state = require("../controllers/StateManager");
 
 class Messenger extends EventEmitter {
     constructor(port) {
@@ -74,7 +75,7 @@ class Messenger extends EventEmitter {
         this.server.curve_secretkey = serverPrivateKey;
         this.server.curve_publickey = serverPublicKey;
         this.server.bind(port);
-        this.has_handshake = [];
+        // this.has_handshake = [];
         const that = this;
         this.server.on('message', this.emitfunction.bind(this));
 
@@ -84,36 +85,37 @@ class Messenger extends EventEmitter {
       var robot_id = arguments[0].toString('utf8');
       var json_string = arguments[1].toString('utf8');
       var json_parsed = JSON.parse(json_string);
-      if(json_parsed['message_type'] == 'handshake'){
-        var handshake = {
-          "message_id": "067c8c59-710a-4c15-8265-b7f1e49b828c",
-          "message_type": "handshake"
-        };
-        var robot_id = json_parsed['robot_id'];
-        this.server.send([robot_id, JSON.stringify(handshake)]);
-        if(this.has_handshake.indexOf(robot_id ) == -1){
-          this.emit('handshake', robot_id);
-        }
-        this.has_handshake.push(json_parsed['robot_id']);
+      if(robot_id !== json_parsed['robot_id']){
+        console.log("Error: robot_id of sender and robot_id in handshake message are different.  May cause weirdness.");
       }
-      else if(this.has_handshake.indexOf(robot_id ) == -1){
+      if(json_parsed['message_type'] == 'handshake'){
+        this.emit('handshake', json_parsed);
+      }
+      else if(!state.robotExists(robot_id)){
         console.log("Must receive handshake message before messaging!");
       }
-      else{
+      else if(json_parsed['message_type'] == "alive"){
+        this.emit('alive', json_parsed);
+      }
+      else if(json_parsed['message_type'] == "acknowledgement"){
         this.emit('message', json_parsed);
+      }
+      else{
+        console.log("Error: Unknown message type '" + json_parsed['message_type'] + "'.");
       }
     }
 
-    send(data) {
-      var name = data['robot_id'];
+    send(robot_id, data) {
+      // var robot_id = data['robot_id'];
       var json = data;
       var answer = false;
       console.log("What")
       console.log(json);
-      console.log(name);
+      console.log(robot_id);
       console.log("End what")
-      if(this.has_handshake.indexOf(name) > -1){
-        this.server.send([name, JSON.stringify(json)]);
+      // if(this.has_handshake.indexOf(name) > -1){
+      if(state.robotExists(robot_id)){
+        this.server.send([robot_id, JSON.stringify(json)]);
         answer = true;
       }
       return answer;
