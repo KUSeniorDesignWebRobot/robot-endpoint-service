@@ -89,8 +89,8 @@ class Messenger extends EventEmitter {
       var json_parsed = JSON.parse(json_string);
       if(robot_id !== json_parsed['robot_id']){
         console.log("Error: robot_id of sender and robot_id in handshake message are different.  May cause weirdness.");
-        console.log(robot_id);
-        console.log(json_parsed['robot_id']);
+        console.log("robot_id: " + robot_id);
+        console.log("robot_id from handshake: " + json_parsed['robot_id']);
       }
       if(json_parsed['message_type'] == 'handshake'){
         this.emit('handshake', json_parsed);

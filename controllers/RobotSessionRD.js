@@ -13,7 +13,6 @@ class RobotSession {
     this.intervalID = setInterval(this.checkAlive.bind(this), 1000, manifest);
     messenger.on('alive', this.aliveMessageReceived.bind(this));
     this.lastMessageReceivedTimestamp = Date.now();
-    console.log(this.lastMessageReceivedTimestamp);
   }
   commandMessage(msg) {
     if(typeof(msg) === "string"){
