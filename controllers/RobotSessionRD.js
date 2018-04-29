@@ -10,9 +10,10 @@ class RobotSession {
     this.commandMessageAcknowledgementQueueId = null;
     this.reportMessageQueueId = null;
     this.manifest = manifest;
-    this.intervalID = setInterval(this.checkAlive, 1000, manifest);
+    this.intervalID = setInterval(this.checkAlive.bind(this), 1000, manifest);
     messenger.on('alive', this.aliveMessageReceived.bind(this));
     this.lastMessageReceivedTimestamp = Date.now();
+    console.log(this.lastMessageReceivedTimestamp);
   }
   commandMessage(msg) {
     if(typeof(msg) === "string"){
@@ -68,12 +69,13 @@ class RobotSession {
   closeRobotSession(){
     this.unattachSession();
     this.stopAliveCheck();
-    state.removeRobotById(manifest['robot_id']);
+    state.removeRobotById(this.manifest['robot_id']);
   }
 
   checkAlive(manifest){
+    var lastTime = this.lastMessageReceivedTimestamp;
     this.lastMessageSentTimestamp = Date.now();
-    if(this.lastMessageSentTimestamp - this.lastMessageReceivedTimestamp > 2000){
+    if(this.lastMessageSentTimestamp - lastTime > 2000){
       console.log("Error: Connection timeout with Robot, no alive check message received for 2000 milliseconds");
       this.closeRobotSession();
     }
@@ -92,8 +94,9 @@ class RobotSession {
   }
 
   aliveMessageReceived(json_parsed){
-    if(json_parsed['robot_id'] === this.manifest['robot_id']);
+    if(json_parsed['robot_id'] === this.manifest['robot_id']){
       this.lastMessageReceivedTimestamp = Date.now();
+    }
   }
 }
 

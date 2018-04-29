@@ -18,9 +18,9 @@ class Messenger extends EventEmitter {
 
         // Placeholder for actual per-session key-generation (as seen above, but need to work out public key trading first with robot_client.py)
         let serverPublicKey = "N@7tEO8coes2iv=YB0+ZdOelzh<b%yn$F6<L^iwQ",
-            serverPrivateKey = "q{>-q6JR!AkF}}RJnu+v3gLq&n7tXQ(UikHwWji[",
-            clientPublicKey = ".V:v04@zyE(ph9Hrx%d/HpVqg8WWkp(.>v7{/pMm",
-            clientPrivateKey = "}6bD1wzt}sn=l5AfMMiN>%:CkkPCDt2aL*j:<Gd+";
+            serverPrivateKey = "q{>-q6JR!AkF}}RJnu+v3gLq&n7tXQ(UikHwWji[";
+            // clientPublicKey = ".V:v04@zyE(ph9Hrx%d/HpVqg8WWkp(.>v7{/pMm",
+            // clientPrivateKey = "}6bD1wzt}sn=l5AfMMiN>%:CkkPCDt2aL*j:<Gd+";
         // Requires for ZAP handler
         let zmqzap = require('zmq-zap'),
             ZAP = zmqzap.ZAP,
@@ -32,11 +32,12 @@ class Messenger extends EventEmitter {
         // Tell it to use the CURVE mechanism for authentication
         zap.use(new CurveMechanism(function(data, callback) {
             console.log('Authenticating %s', JSON.stringify(data, true, 2));
-            if ((data.domain == 'test')){
+            if ((data.domain == 'robots')){
                // && (data.address == "127.0.0.1")) { //this caused it to fail bc we're bound to * which is the current IP, which might not be 127.0.0.1
                 // while(1)
-                if (data.publickey == clientPublicKey) callback(null, true);
-                else callback(null, false);
+                // if (data.publickey == clientPublicKey) callback(null, true);
+                // else callback(null, true);
+                callback(null, true);
             }
             else{
                callback(null, false);
@@ -70,7 +71,7 @@ class Messenger extends EventEmitter {
         // Set the private key for the server so that it can decrypt messages (it does not need its public key)
         this.server.curve_secretkey = serverPrivateKey;
         // Set a domain, but this is optional
-        this.server.zap_domain = "test";
+        this.server.zap_domain = "robots";
 
         this.server.curve_secretkey = serverPrivateKey;
         this.server.curve_publickey = serverPublicKey;

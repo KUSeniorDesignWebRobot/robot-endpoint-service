@@ -139,7 +139,8 @@ var instance;
 
     removeRobotById(robotId){
       if (this.robotExists(robotId)){
-        this.__robotVars[robotId] = undefined;
+        console.log(__robotVars);
+        __robotVars[robotId] = undefined;
         return true;
       }
       else{
