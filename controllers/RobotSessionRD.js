@@ -20,7 +20,6 @@ class RobotSession {
     }
     var robot_id = msg['robot_id'];
     this.lastMessageSentTimestamp = Date.now();
-    console.log("Sending Command: " + this.lastMessageSentTimestamp);
     if(!messenger.send(robot_id, msg)){
       mq.enqueueToFront(msg, this.commandMessageQueueId, true);
     }
@@ -28,7 +27,6 @@ class RobotSession {
 
   commandMessageAcknowledgement(msg){
     this.lastMessageReceivedTimestamp = Date.now();
-    console.log("Ack recv'd: " + this.lastMessageReceivedTimestamp);
     mq.enqueue(msg, this.commandMessageAcknowledgementQueueId);
   }
 
@@ -97,7 +95,6 @@ class RobotSession {
   aliveMessageReceived(json_parsed){
     if(json_parsed['robot_id'] === this.manifest['robot_id']){
       this.lastMessageReceivedTimestamp = Date.now();
-      console.log("Alive message received" + this.lastMessageReceivedTimestamp)
     }
   }
 }

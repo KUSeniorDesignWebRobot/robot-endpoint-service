@@ -7,20 +7,14 @@ class Messenger extends EventEmitter {
         let zmq = require('zeromq'),
         z85 = require('z85'),
         debug = require('debug')('zmq-zap:examples:curve');
-        // port = 'tcp://127.0.0.1:5555';
 
         let serverKeypair = zmq.curveKeypair();
         let  clientKeypair = zmq.curveKeypair();
-        // var serverPublicKey = serverKeypair.public,
-        // 	serverPrivateKey = serverKeypair.secret,
-        // 	clientPublicKey = clientKeypair.public,
-        // 	clientPrivateKey = clientKeypair.secret;
 
         // Placeholder for actual per-session key-generation (as seen above, but need to work out public key trading first with robot_client.py)
         let serverPublicKey = "N@7tEO8coes2iv=YB0+ZdOelzh<b%yn$F6<L^iwQ",
             serverPrivateKey = "q{>-q6JR!AkF}}RJnu+v3gLq&n7tXQ(UikHwWji[";
-            // clientPublicKey = ".V:v04@zyE(ph9Hrx%d/HpVqg8WWkp(.>v7{/pMm",
-            // clientPrivateKey = "}6bD1wzt}sn=l5AfMMiN>%:CkkPCDt2aL*j:<Gd+";
+
         // Requires for ZAP handler
         let zmqzap = require('zmq-zap'),
             ZAP = zmqzap.ZAP,
@@ -33,10 +27,6 @@ class Messenger extends EventEmitter {
         zap.use(new CurveMechanism(function(data, callback) {
             console.log('Authenticating %s', JSON.stringify(data, true, 2));
             if ((data.domain == 'robots')){
-               // && (data.address == "127.0.0.1")) { //this caused it to fail bc we're bound to * which is the current IP, which might not be 127.0.0.1
-                // while(1)
-                // if (data.publickey == clientPublicKey) callback(null, true);
-                // else callback(null, true);
                 callback(null, true);
             }
             else{
@@ -77,7 +67,6 @@ class Messenger extends EventEmitter {
         this.server.curve_publickey = serverPublicKey;
         this.server.bind(port);
         console.log("Listening for robots on port: " + port);
-        // this.has_handshake = [];
         const that = this;
         this.server.on('message', this.emitfunction.bind(this));
 
@@ -110,10 +99,8 @@ class Messenger extends EventEmitter {
     }
 
     send(robot_id, data) {
-      // var robot_id = data['robot_id'];
       var json = data;
       var answer = false;
-      // if(this.has_handshake.indexOf(name) > -1){
       if(state.robotExists(robot_id)){
         this.server.send([robot_id, JSON.stringify(json)]);
         answer = true;

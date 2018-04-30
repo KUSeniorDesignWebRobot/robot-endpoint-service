@@ -49,14 +49,12 @@ class SocketSession {
   commandMessage(commandMessage) {
     if (this.established) {
       var key = this.sessionId + "-cmd";
-      console.log('enqueue(' + commandMessage + ', ' + key + ')');
       mq.enqueue(commandMessage, key);
     }
   }
 
   reportMessage(reportMessage) {
     if (this.established) {
-      console.log('reportMessage!!');
       this.socket.emit("reportMessage", reportMessage);
     }
   }

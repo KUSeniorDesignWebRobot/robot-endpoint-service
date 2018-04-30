@@ -5,29 +5,21 @@ class MessageQueue {
   }
 
   enqueue(item, key, quiet = false) {
-    // console.log("Adding: " + item + " to the " + key + " queue");
     if (this._queues[key] === undefined) {
-      console.log('creating queue with key ' + key);
       this._queues[key] = [];
     }
-    // console.log('pushing ' + item + ' onto queue ' + key);
     this._queues[key].push(item);
     if (this._subscriptions[key] !== undefined && !quiet) {
-      console.log('emitting on ' + key);
       this._emit(key);
     }
   }
 
   enqueueToFront(item, key, quiet = false) {
-    // console.log("Adding: " + item + " to the front of " + key + " queue");
     if (this._queues[key] === undefined) {
-      console.log('creating queue with key ' + key);
       this._queues[key] = [];
     }
-    // console.log('pushing ' + item + ' to the front of queue ' + key);
     this._queues[key].unshift(item);
     if (this._subscriptions[key] !== undefined && !quiet) {
-      // console.log('emitting on ' + key);
       this._emit(key);
     }
   }
