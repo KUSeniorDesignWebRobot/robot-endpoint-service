@@ -12,33 +12,17 @@ router.get('/', checkAuth,
   (req, res) => {
     UserController.getRobots(req.user).then(robots => {
       res.render('app', {
-        'title': 'STV Robotics',
+        'title': 'STV Robotics: Home',
         robots: robots,
         messages: {
           'info': req.flash('info'),
           'warning': req.flash('warning'),
           'error': req.flash('error')
-        }
+        },
+        logged_in: true
       });
     });
   });
-
-// delete plz
-router.get('/plz', checkAuth, (req, res) => {
-  res.render('app/session', {
-    robot: {
-      name: 'jim',
-      id: 'asdf',
-      RobotId: 'asdfgh'
-    },
-    title: 'plz',
-    messages: {
-      'info': req.flash('info'),
-      'warning': req.flash('warning'),
-      'error': req.flash('error')
-    }
-  });
-});
 
 
 router.get('/session/:robotid', checkAuth, (req, res) => {
@@ -52,7 +36,8 @@ router.get('/session/:robotid', checkAuth, (req, res) => {
           'info': req.flash('info'),
           'warning': req.flash('warning'),
           'error': req.flash('error')
-        }
+        },
+        logged_in: true
       });
     } else {
       req.flash('error', 'No active robot with that ID is registered to you');

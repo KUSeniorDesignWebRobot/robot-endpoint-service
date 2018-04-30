@@ -1,3 +1,11 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #212427; }
+
 body {
   padding: 50px; }
 
@@ -9,7 +17,14 @@ a {
   border-right-width: 1px;
   border-right-color: rgba(0, 0, 0, 0.1); }
 
-.rzslider.smooth .rz-bar.rz-selection, .rzslider.smooth .rz-pointer {
+@media only screen and (max-width: 767px) {
+  .right-border-line {
+    border-right-style: none;
+    border-right-width: 0;
+    border-right-color: transparent; } }
+
+.rzslider.smooth .rz-bar.rz-selection,
+.rzslider.smooth .rz-pointer {
   transition: all 0.1s; }
 
 .control-container {
@@ -21,3 +36,7 @@ a {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   height: auto; }
+
+.center-col {
+  float: none;
+  margin: 0 auto; }

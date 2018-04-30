@@ -9,7 +9,14 @@ const checkAuth = require("../controllers/Auth");
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  res.render('index', {'title': 'STV Robotics: Login', messages: {'info': req.flash('info'), 'warning': req.flash('warning'), 'error': req.flash('error')}});
+  res.render('index', {
+    'title': 'STV Robotics: Login',
+    messages: {
+      'info': req.flash('info'),
+      'warning': req.flash('warning'),
+      'error': req.flash('error')
+    }
+  });
 });
 
 router.post('/login',
@@ -19,8 +26,20 @@ router.post('/login',
     failureFlash: true
   }));
 
+router.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
 router.get('/register', (req, res) => {
-  res.render('register', {'title': 'STV Robotics: Register', messages: {'info': req.flash('info'), 'warning': req.flash('warning'), 'error': req.flash('error')}});
+  res.render('register', {
+    'title': 'STV Robotics: Register',
+    messages: {
+      'info': req.flash('info'),
+      'warning': req.flash('warning'),
+      'error': req.flash('error')
+    }
+  });
 });
 
 router.post('/register', (req, res) => {
@@ -28,7 +47,11 @@ router.post('/register', (req, res) => {
   let password = req.body.password;
   console.log(username);
   console.log(password);
-  User.count({where:{username:username}}).then(count => {
+  User.count({
+    where: {
+      username: username
+    }
+  }).then(count => {
     console.log(count);
     if (count === 0) {
       UserController.createUser(username, password);

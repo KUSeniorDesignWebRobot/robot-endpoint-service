@@ -19,7 +19,7 @@ app.controller('demo', function($scope, $http, $log, $timeout, $interval) {
     $scope.configurationId = uuidv4(); //required by the spec but not used
     $scope.config = {
       ttl: 1000,
-      sampleIntervalMillis: 500
+      sampleIntervalMillis: 100
     };
 
     // Set up session

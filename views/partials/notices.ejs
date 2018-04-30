@@ -1,37 +1,35 @@
-<div>
+<div class="mt-3">
   <% if (locals.messages) { %>
     <% if (locals.messages.info && messages.info.length > 0) { %>
-      <div class="alert alert-primary" role="alert">
-        <ul class="list-group list-group-flush">
-          <% for(infoMessage of messages.info) { %>
-            <li class="list-group-item list-group-item-primary">
-              <%= infoMessage %>
-            </li>
-            <% } %>
-        </ul>
+      <div class="" role="alert">
+        <% for(infoMessage of messages.info) { %>
+          <p class="list-group-item list-group-item-primary">
+            <%= infoMessage %>
+          </p>
+        <% } %>
       </div>
     <% } %>
     <% if(locals.messages.warning && messages.warning.length > 0) { %>
-      <div class="alert alert-warning" role="alert">
-        <ul class="list-group list-group-flush">
-          <% for(warningMessage of messages.warning) { %>
-            <li class="list-group-item list-group-item-warning">
-              <%= warningMessage %>
-            </li>
-            <% } %>
-        </ul>
+      <div class="" role="alert">
+        <% for(warningMessage of messages.warning) { %>
+          <p class="list-group-item list-group-item-warning">
+            <%= warningMessage %>
+          </p>
+        <% } %>
       </div>
     <% } %>
     <% if(locals.messages.error && messages.error.length > 0) { %>
-      <div class="alert alert-danger" role="alert">
-        <ul class="list-group list-group-flush">
-          <% for(errorMessage of messages.error) { %>
-            <li class="list-group-item list-group-item-danger">
-              <%= errorMessage %>
-            </li>
-            <% } %>
-        </ul>
+      <div class="" role="alert">
+        <% for(errorMessage of messages.error) { %>
+          <p class="list-group-item list-group-item-danger">
+            <%= errorMessage %>
+          </p>
+        <% } %>
       </div>
     <% } %>
+
+    <pre>
+      <%=JSON.stringify(locals.messages) %>
+    </pre>
   <% } %>
 </div>

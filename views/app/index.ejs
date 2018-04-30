@@ -5,10 +5,10 @@
   <% include ../partials/header %>
 
     <body>
+      <% include ../partials/navbar %>
       <div class="container">
-
         <div class="row">
-          <div class="col-md-6 right-border-line">
+          <div class="col-md-6 right-border-line mb-3">
             <h2>Robots</h2>
             <div>
               <% if (robots.length === 0) { %>
@@ -35,7 +35,7 @@
               <div class="panel-body"></div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6 mb-3">
             <form action="/app/robot" method="post">
               <h3>Register a Robot</h3>
               <div class="form-group">
