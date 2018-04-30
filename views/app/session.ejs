@@ -12,25 +12,13 @@
     <div class="container" ng-app="myApp" ng-controller="demo">
       <h1>Robot Session: <%= robot.name %> </h1>
 
-      <div class="form-group">
-        <label for="message-field">Message:</label>
-        <input id="message-field" class="form-control" type="text" ng-model="cmessage">
-      </div>
-
-      <button class="btn btn-primary" ng-class="sessionReady ? '' : 'disabled'" ng-click="sendMessage()">Send</button>
-
       <hr/>
 
-      <div class="panel panel-default">
-        <div class="panel-heading">Report Messages</div>
-        <div class="panel-body">
-          <p style="font-family:monospace;" ng-repeat="message in reportMessages">{{message}}</p>
+      <div class="control-container row">
+        <div class="control-wrapper col-md-3" ng-repeat="control in controls">
+          <p>{{control.description}}</p>
+          <rzslider rz-slider-model="control.value" rz-slider-options="control.options"></rzslider>
         </div>
-      </div>
-
-      <div ng-repeat="control in controls">
-        <p>{{control.description}}</p>
-        <rzslider rz-slider-model="control.value" rz-slider-options="control.options"></rzslider>
       </div>
     </div>
 

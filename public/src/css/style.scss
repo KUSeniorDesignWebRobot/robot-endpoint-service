@@ -17,3 +17,21 @@ a {
     transition: all 0.1s;
   }
 }
+
+.control-container {
+  // min-height: 600px;
+  // display: flex;
+  // flex-direction: column;
+  // flex-wrap: wrap;
+  // align-items: flex-start;
+  max-width: 100%;
+}
+
+.control-wrapper {
+  margin: 10px;
+  padding: 5px;
+  // flex-grow: 1;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 5px;
+  height: auto;
+}
